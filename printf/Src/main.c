@@ -107,7 +107,8 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-
+		printf("printf %s %d\r\n", "Good", 7);
+		HAL_Delay(1000);
   }
   /* USER CODE END 3 */
 
