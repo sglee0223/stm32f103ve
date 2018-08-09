@@ -62,7 +62,13 @@ void SystemClock_Config(void);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
-
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+		if (htim->Instance == TIM1)
+		{
+			 LED1_CTRL(GPIO_TOGGLE);
+		}
+}
 /* USER CODE END 0 */
 
 /**
@@ -96,6 +102,17 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
+	
+/*
+	400ms
+
+	1) 72MHz System Clock, Prescaler 1MHz Timer Clock
+			Prescaler = 72MHz / 36000 - 1 = 2KHz - 1 = 0.05ms
+	2) 2KHz Timer Clock, 
+			Period = 800 => 400ms
+*/
+	
+	HAL_TIM_Base_Start_IT(&htim1);
 
   /* USER CODE END 2 */
 
