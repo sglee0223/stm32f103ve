@@ -43,7 +43,7 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "dwt_stm32_delay.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -96,7 +96,18 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+	DWT_Delay_Init();
 
+	LED1_CTRL(GPIO_HIGH);
+	
+	printf("1: %d\r\n", DWT->CYCCNT);
+	DWT_Delay_us(1000); // 1ms
+	printf("2: %d\r\n", DWT->CYCCNT);
+	
+	printf("3: %d\r\n", DWT->CYCCNT);
+	HAL_Delay(1); // 1ms
+	printf("4: %d\r\n", DWT->CYCCNT);	
+	
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -107,7 +118,8 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-
+		DWT_Delay_us(5);
+		LED1_CTRL(GPIO_TOGGLE);
   }
   /* USER CODE END 3 */
 
