@@ -44,6 +44,7 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
+#include "lcd1602.h"
 
 /* USER CODE END Includes */
 
@@ -98,7 +99,18 @@ int main(void)
   MX_I2C1_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+	
+	I2C_Scan();
+	LCD_Init(LCD_ADDR);
 
+	// set address to 0x00
+	LCD_SendCommand(LCD_ADDR, 0x80);
+	LCD_SendString(LCD_ADDR, " Using 1602 LCD");
+
+	// set address to 0x40
+	LCD_SendCommand(LCD_ADDR, 0xC0);
+	LCD_SendString(LCD_ADDR, "  over I2C bus");
+	
   /* USER CODE END 2 */
 
   /* Infinite loop */
