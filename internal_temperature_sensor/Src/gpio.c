@@ -80,6 +80,38 @@ void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 2 */
 
+void LED1_CTRL(uint8_t mode)
+{
+	switch(mode)
+	{
+		case GPIO_LOW:
+			HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
+			break;
+		case GPIO_HIGH:
+			HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
+			break;	
+		case GPIO_TOGGLE:
+			HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
+			break;
+	}
+}
+
+void LED2_CTRL(uint8_t mode)
+{
+	switch(mode)
+	{
+		case GPIO_LOW:
+			HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET);
+			break;
+		case GPIO_HIGH:
+			HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_SET);
+			break;	
+		case GPIO_TOGGLE:
+			HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
+			break;
+	}
+}
+
 /* USER CODE END 2 */
 
 /**

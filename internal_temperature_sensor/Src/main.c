@@ -74,7 +74,8 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+	uint32_t adc1, temperature;
+	float vsense = 3.3/4095;
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -98,7 +99,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-
+	HAL_ADC_Start(&hadc1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -109,7 +110,27 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+		LED1_CTRL(GPIO_TOGGLE);
 
+		//HAL_ADC_Start(&hadc1);
+		HAL_ADC_PollForConversion(&hadc1, 100);
+		adc1 = HAL_ADC_GetValue(&hadc1);
+		//HAL_ADC_Stop(&hadc1);
+
+/*
+Reference Manual & Datasheet
+		
+Temperature (in 'C) = {(V25 - VSENSE) / Avg_Slope} + 25.
+Where,
+V25 = VSENSE value for 25'C and
+Avg_Slope = Average Slope for curve between Temperature vs. VSENSE 
+(given in mV/'C or uV/'C).
+*/	
+		temperature = ((adc1*vsense - 1.43)/0.0043) + 25;
+		printf("temperature: %d, %d\r\n", adc1, temperature);
+		
+		HAL_Delay(500);
+		
   }
   /* USER CODE END 3 */
 
