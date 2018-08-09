@@ -1,0 +1,46 @@
+Configuration	printf
+STM32CubeMX 	4.26.0
+Date	08/09/2018
+MCU	STM32F103VETx
+
+
+
+PERIPHERALS	MODES	FUNCTIONS	PINS
+SYS	No Debug	SYS_VS_ND	VP_SYS_VS_ND
+SYS	SysTick	SYS_VS_Systick	VP_SYS_VS_Systick
+USART1	Asynchronous	USART1_RX	PA10
+USART1	Asynchronous	USART1_TX	PA9
+
+
+
+Pin Nb	PINs	FUNCTIONs	LABELs
+68	PA9	USART1_TX	
+69	PA10	USART1_RX	
+
+
+
+SOFTWARE PROJECT
+
+Project Settings : 
+Project Name : printf
+Project Folder : D:\[project]\stm32f103vet6\github\printf
+Toolchain / IDE : MDK-ARM V5
+Firmware Package Name and Version : STM32Cube FW_F1 V1.6.1
+
+
+Code Generation Settings : 
+STM32Cube Firmware Library Package : Copy only the necessary library files
+Generate peripheral initialization as a pair of '.c/.h' files per peripheral : Yes
+Backup previously generated files when re-generating : No
+Delete previously generated files when not re-generated : Yes
+Set all free pins as analog (to optimize the power consumption) : No
+
+
+Toolchains Settings : 
+Compiler Optimizations : Balanced Size/Speed
+
+
+
+
+
+
