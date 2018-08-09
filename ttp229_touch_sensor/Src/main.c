@@ -44,6 +44,9 @@
 
 /* USER CODE BEGIN Includes */
 
+#include "dwt_stm32_delay.h"
+#include "ttp229.h"
+
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -96,14 +99,25 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
+	DWT_Delay_Init();
+	
+	SetSCL(GPIO_PIN_SET);
+		
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
+		LED1_CTRL(GPIO_TOGGLE);
+		
+		uint8_t key = ReadKey16(); // Blocking
+		//uint8_t key = GetKey16(); // Non Blocking
+  	if(key)
+		{
+    	printf("key = %d\r\n", key);
+			//HAL_Delay(500);
+		}
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */

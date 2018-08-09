@@ -54,11 +54,21 @@
 
 /* USER CODE BEGIN Private defines */
 
+#define GPIO_LOW 0
+#define GPIO_HIGH 1
+#define GPIO_TOGGLE 2
+
 /* USER CODE END Private defines */
 
 void MX_GPIO_Init(void);
 
 /* USER CODE BEGIN Prototypes */
+
+void SetSCL(GPIO_PinState v);
+GPIO_PinState GetSDO(void);
+
+void LED1_CTRL(uint8_t mode);
+void LED2_CTRL(uint8_t mode);
 
 /* USER CODE END Prototypes */
 
