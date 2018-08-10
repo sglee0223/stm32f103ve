@@ -44,7 +44,7 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "dwt_stm32_delay.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -98,6 +98,7 @@ int main(void)
   MX_TIM3_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+	DWT_Delay_Init();
 
   /* USER CODE END 2 */
 
@@ -109,7 +110,41 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+	
+	/*
+		20ms 
 
+		1) 72MHz System Clock, Prescaler 1MHz Timer Clock
+			Prescaler = 72MHz / 72MHz - 1 = 1MHz
+		2) 1MHz Timer Clock, 20,000, 50Hz 
+			Period = 1MHz / 50Hz = 20,000
+	*/
+#if 1		
+		LED1_CTRL(GPIO_TOGGLE);
+		
+		htim3.Instance->CCR1 = 1500; // pos 0' , 20,000 * 7.5 / 100		
+		HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);		
+		HAL_Delay(1000);
+		HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_1);
+#endif		
+#if 1		
+		LED1_CTRL(GPIO_TOGGLE);
+		
+		htim3.Instance->CCR1 = 2300; // pos 90' , 20,000 * 11.5 / 100		
+		HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+		HAL_Delay(1000);
+		HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_1);
+#endif		
+#if 1		
+		LED1_CTRL(GPIO_TOGGLE);
+		
+		htim3.Instance->CCR1 = 700; // pos -90' , 20,000 * 3.5 / 100		
+		HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+		HAL_Delay(1000);
+		HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_1);
+#endif
+		//LED1_CTRL(GPIO_TOGGLE);
+		//HAL_Delay(2000);
   }
   /* USER CODE END 3 */
 
