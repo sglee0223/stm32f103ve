@@ -44,6 +44,8 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
+#include "dwt_stm32_delay.h"
+#include "at45dbxx.h"
 
 /* USER CODE END Includes */
 
@@ -98,18 +100,26 @@ int main(void)
   MX_USART1_UART_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
+	DWT_Delay_Init ();
+	
+	LED1_CTRL(GPIO_HIGH);	
 
+	printf("Program Start\r\n");
+
+	at45db_initialize();
+	at45db_test();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+	printf("while~\r\n");
   while (1)
   {
 
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-
+		
   }
   /* USER CODE END 3 */
 
