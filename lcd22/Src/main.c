@@ -45,7 +45,10 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
+#include "dwt_stm32_delay.h"
 
+#include "LCD_BD663474.h"
+#include "TouchPanel_XPT2046.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -101,7 +104,33 @@ int main(void)
   MX_TIM3_Init();
   MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
+	DWT_Delay_Init ();
+	
+	LED1_CTRL(GPIO_HIGH);
+		
+	printf("LCD22 Test Start\r\n");
+	
+	lcd_init();
+	lcd_display_string( (unsigned char*)"0st Line                      ", BLACK, GREEN, 0, 0 );
+	lcd_display_string( (unsigned char*)"123456789012345678901234567890", BLACK, GREEN, 0, 1 );
+  lcd_display_string( (unsigned char*)"240RGB x 320-Dot              ", BLACK, GREEN, 0, 2 );
+	lcd_display_string( (unsigned char*)"262,144-Color TFT-LCD Panel   ", BLACK, GREEN, 0, 3 );
+	lcd_display_string( (unsigned char*)"8 x 16 dot font               ", BLACK, GREEN, 0, 4 );
+	lcd_display_string( (unsigned char*)"30 strings x 20 lines         ", BLACK, GREEN, 0, 5 );
+	lcd_display_string( (unsigned char*)"                              ", BLACK, GREEN, 0, 7 );
+	lcd_display_string( (unsigned char*)"                              ", BLACK, GREEN, 0, 9 );
+	lcd_display_string( (unsigned char*)"                              ", BLACK, GREEN, 0, 11 );
+	lcd_display_string( (unsigned char*)"                              ", BLACK, GREEN, 0, 13 );
+	lcd_display_string( (unsigned char*)"                              ", BLACK, GREEN, 0, 15 );
+	lcd_display_string( (unsigned char*)"                              ", BLACK, GREEN, 0, 17 );
+	lcd_display_string( (unsigned char*)"19st Line                     ", BLACK, GREEN, 0, 19 );
+	
+	printf("LCD22 Test End\r\n");
+	HAL_Delay(3000);
 
+	TouchPanel_Calibrate(WHITE, BLUE);
+	//TouchPanel_Calibrate2();
+	GUI_Text(0, 0, "Touchpad:", WHITE, BLUE);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -112,7 +141,9 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-
+		getDisplayPoint(&display, Read_Ads7846(), &matrix ); 		
+ 	  //TP_DrawPoint(display.x,display.y);	
+		Touch_Debug();
   }
   /* USER CODE END 3 */
 
