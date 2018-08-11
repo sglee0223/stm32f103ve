@@ -1,4 +1,4 @@
 
-mkfs function sometimes works because of hw issue
+The mkfs function was intermittent because it was a connection using a jumper wire
 
-Due to the hw issue, the DMA method can not be arranged
+Because the connection was made using a jumper wire, DMA operation could not be arranged
