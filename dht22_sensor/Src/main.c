@@ -43,7 +43,8 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "dwt_stm32_delay.h"
+#include "dht22.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -96,18 +97,24 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
+	DWT_Delay_Init ();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
+	printf( "start program\r\n");
   while (1)
   {
 
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+		LED1_CTRL(GPIO_TOGGLE);
+		
+		read_dht_data();
 
+		HAL_Delay(1000);		
   }
   /* USER CODE END 3 */
 
