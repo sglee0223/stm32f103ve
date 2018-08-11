@@ -44,6 +44,7 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
+#include "vs1003.h"
 
 /* USER CODE END Includes */
 
@@ -51,7 +52,9 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-
+#define GPIO_TEST 0
+#define LINE_OUT_TEST 1
+#define LINE_IN_TEST 0
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -98,6 +101,22 @@ int main(void)
   MX_SPI2_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+	
+	printf("\r\nProgram Start\r\n");
+	
+  VS1003_Init();
+  VS1003_SoftReset();
+
+  /* Check VS10xx type */
+  printf("Chip is VS %d\r\n", ((VS1003_ReadReg(SPI_STATUS) >> 4) & 0xF));
+
+#if GPIO_TEST
+	VS1003_WriteReg(SPI_WRAMADDR, 0xc017);
+	VS1003_WriteReg(SPI_WRAM, 0x000f);
+#endif
+#if LINE_IN_TEST	
+	VS1003_LineIn_Init();
+#endif	
 
   /* USER CODE END 2 */
 
@@ -105,11 +124,25 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
+		LED1_CTRL(GPIO_TOGGLE);
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+#if LINE_OUT_TEST
+		//VS1003_SineTest();
+		VS1003_PlayBeep();
+		HAL_Delay(1000);
+#endif
+		
+#if GPIO_TEST	
+		VS1003_WriteReg(SPI_WRAMADDR, 0xc019);
+		VS1003_WriteReg(SPI_WRAM, 0x000f);
+		HAL_Delay(500);
 
+		VS1003_WriteReg(SPI_WRAMADDR, 0xc019);
+		VS1003_WriteReg(SPI_WRAM, 0x0000);	
+		HAL_Delay(500);
+#endif		
   }
   /* USER CODE END 3 */
 
@@ -181,6 +214,8 @@ void _Error_Handler(char *file, int line)
   /* User can add his own implementation to report the HAL error return state */
   while(1)
   {
+  	LED2_CTRL(GPIO_TOGGLE);
+	HAL_Delay(500);
   }
   /* USER CODE END Error_Handler_Debug */
 }
