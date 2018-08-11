@@ -1,0 +1,4 @@
+
+mkfs function sometimes works because of hw issue
+
+Due to the hw issue, the DMA method can not be arranged
