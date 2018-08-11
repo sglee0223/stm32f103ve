@@ -1,0 +1,17 @@
+
+GPIO Test, not tested
+Line In Test, not tested
+Line Out Test, tested
+Mic In Test, tested
+
+There was a lot of hw noise because it was a connection using a jumper wire.
+
+Use 8Kbps, mono files.
+Audacity audio editing program to create 8Kbps, mono format mp3 and 
+get x array file through xxd command in linux environment
+
+$ xxd -i input.raw
+    unsigned char hel_raw[] = {
+      0x7e, 0x7e, ......
+    };
+    unsigned int hel_raw_len = 2555;
