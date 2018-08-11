@@ -101,13 +101,38 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+	
+	LED1_CTRL(GPIO_HIGH);
+	
+	HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
+	
+	/*
+		0.1ms 
+
+		1) 72MHz System Clock, Prescaler 1MHz Timer Clock
+			Prescaler = 72MHz / 72MHz - 1 = 1MHz
+		2) 1MHz Timer Clock, 100, 10KHz 
+			Period = 1MHz / 10KHz = 100
+	*/
+	
+	//HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+	//htim3.Instance->CCR1 = 100; // 100% duty cycle
+	//uint8_t duty = 0;
+	
   while (1)
   {
 
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-
+#if 0		
+		htim3.Instance->CCR1 = duty;
+		duty = duty + 10;
+		if (duty>100)
+			duty = 0;
+		
+		HAL_Delay(1000);
+#endif		
   }
   /* USER CODE END 3 */
 
