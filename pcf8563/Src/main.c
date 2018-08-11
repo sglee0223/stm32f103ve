@@ -44,7 +44,7 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "pcf8563.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -98,7 +98,10 @@ int main(void)
   MX_USART1_UART_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
-
+	I2C_Scan();
+	RTC_Init();
+	PCF8563_setDate(1999, 12, 31);
+	PCF8563_setTime(23, 59, 50);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -109,7 +112,11 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-
+		LED1_CTRL(GPIO_TOGGLE);
+		HAL_Delay(999);
+		
+		PCF8563_getDate();
+		PCF8563_getTime();
   }
   /* USER CODE END 3 */
 
