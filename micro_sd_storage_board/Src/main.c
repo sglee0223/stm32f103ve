@@ -55,13 +55,16 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
-
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+FATFS SDFatFs;  /* File system object for SD card logical drive */
+FIL MyFile;     /* File object */
+extern char SDPath[4]; /* SD card logical drive path */
 
 /* USER CODE END PV */
 
@@ -85,7 +88,11 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+  FRESULT res;                                          /* FatFs function common result code */
+  uint32_t byteswritten, bytesread;                     /* File write/read counts */
+	uint8_t wtext[] = "This is STM32 working with FatFs"; /* File write buffer */
+  uint8_t rtext[100];                     /* File read buffers */
+	char filename[] = "STM32cube.txt";
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -110,6 +117,126 @@ int main(void)
   MX_SDIO_SD_Init();
   MX_FATFS_Init();
   /* USER CODE BEGIN 2 */
+	LED1_CTRL(GPIO_HIGH);
+
+	printf("\r\n ****** FatFs Example ******\r\n\r\n");
+
+  /*##-1- Link the micro SD disk I/O driver ##################################*/
+  if(1)//(FATFS_LinkDriver(&SD_Driver, SDPath) == 0)
+  {
+    /*##-2- Register the file system object to the FatFs module ##############*/
+		printf(" f_mount \r\n");
+    if((res = f_mount(&SDFatFs, (TCHAR const*)SDPath, 0)) != FR_OK)
+    {
+      /* FatFs Initialization Error */
+			printf(" mount error : %d \r\n",res);
+      Error_Handler();
+    }
+    else
+    {
+      /*##-3- Create a FAT file system (format) on the logical drive #########*/
+      /* WARNING: Formatting the uSD card will delete all content on the device */
+			//printf(" f_mkfs \r\n");
+      if(0)//((res = f_mkfs((TCHAR const*)SDPath, 0, 0)) != FR_OK)
+      {
+        /* FatFs Format Error */
+				printf(" mkfs error : %d \r\n",res);
+        Error_Handler();
+      }
+      else
+      {       
+        /*##-4- Create and Open a new text file object with write access #####*/
+				printf(" f_open \r\n");
+        if((res = f_open(&MyFile, filename, FA_CREATE_ALWAYS | FA_WRITE)) != FR_OK)
+        {
+          /* 'STM32.TXT' file Open for write Error */
+					printf(" open error : %d \r\n",res);
+          Error_Handler();
+        }
+        else
+        {
+          /*##-5- Write data to the text file ################################*/
+					printf(" f_write \r\n");
+          if ((res = f_write(&MyFile, wtext, sizeof(wtext), (void *)&byteswritten)) != FR_OK)
+					{
+						printf(" write error : %d \r\n",res);
+						Error_Handler();
+					}
+					printf(" write ok \r\n");
+					
+          /*##-6- Close the open text file #################################*/
+					printf(" f_close \r\n");
+          if ((res = f_close(&MyFile)) != FR_OK )
+          {
+						printf(" close error : %d \r\n",res);
+            Error_Handler();
+          }
+          
+          if(byteswritten == 0)
+          {
+            /* 'STM32.TXT' file Write or EOF Error */
+						printf(" byteswritten = 0 \r\n");
+            Error_Handler();
+          }
+          else
+          {      
+            /*##-7- Open the text file object with read access ###############*/
+						printf(" f_open \r\n");
+            if((res = f_open(&MyFile, filename, FA_READ)) != FR_OK)
+            {
+              /* 'STM32.TXT' file Open for read Error */
+							printf(" open error : %d \r\n", res);
+              Error_Handler();
+            }
+            else
+            {
+              /*##-8- Read data from the text file ###########################*/
+							printf(" f_read \r\n");
+              res = f_read(&MyFile, rtext, sizeof(rtext), (UINT*)&bytesread);
+              
+              if((bytesread == 0) || (res != FR_OK))
+              {
+                /* 'STM32.TXT' file Read or EOF Error */
+								printf(" read error : %d \r\n", res);
+                Error_Handler();
+              }
+              else
+              {
+								printf(" read ok \r\n");
+								
+                /*##-9- Close the open text file #############################*/
+								printf(" f_close \r\n");
+								if ((res = f_close(&MyFile)) != FR_OK )
+								{
+									printf(" close error : %d \r\n",res);
+									Error_Handler();
+								}
+                
+                /*##-10- Compare read data with the expected data ############*/
+                if((bytesread != byteswritten))
+                {                
+                  /* Read data is different from the expected data */
+									printf(" read data wrong : ? \r\n");
+                  Error_Handler();
+                }
+                else
+                {
+                  /* Success of the demo: no error occurrence */
+                  printf(" Good!!! \r\n");
+									HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);
+									HAL_Delay(500);
+									HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  /*##-11- Unlink the RAM disk I/O driver ####################################*/
+  FATFS_UnLinkDriver(SDPath);
 
   /* USER CODE END 2 */
 
@@ -178,7 +305,16 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_SD_ErrorCallback(SD_HandleTypeDef *hsd)
+{
+	printf("HAL_SD_ErrorCallback ErrorCode : 0x%x\r\n", hsd->ErrorCode);
+	
+  while(1)
+  {
+		  LED2_CTRL(GPIO_TOGGLE);
+			HAL_Delay(500);
+  }
+}
 /* USER CODE END 4 */
 
 /**
@@ -191,8 +327,11 @@ void _Error_Handler(char *file, int line)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
+	printf("_Error_Handler : file[%s], line[%d]\r\n", file, line);
   while(1)
   {
+		  LED2_CTRL(GPIO_TOGGLE);
+			HAL_Delay(500);
   }
   /* USER CODE END Error_Handler_Debug */
 }
