@@ -54,11 +54,23 @@
 
 /* USER CODE BEGIN Private defines */
 
+#define GPIO_LOW 0
+#define GPIO_HIGH 1
+#define GPIO_TOGGLE 2
+
 /* USER CODE END Private defines */
 
 void MX_GPIO_Init(void);
 
 /* USER CODE BEGIN Prototypes */
+
+void DHT22_INPUT_MODE(void);
+void DHT22_OUTPUT_MODE(void);
+void DHT22_SET(GPIO_PinState v);
+GPIO_PinState DHT22_GET(void);
+	
+void LED1_CTRL(uint8_t mode);
+void LED2_CTRL(uint8_t mode);
 
 /* USER CODE END Prototypes */
 
