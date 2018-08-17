@@ -1,0 +1,3 @@
+use RCC > HSE > Crystal/Ceramic Resonator
+use PC6, PC7 LED port
+use PB1 to GPIO_EXTI1
