@@ -36,7 +36,7 @@
 #include "stm32f1xx_it.h"
 
 /* USER CODE BEGIN 0 */
-
+#include "gpio.h"
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
@@ -217,6 +217,20 @@ void USART2_IRQHandler(void)
   HAL_UART_IRQHandler(&huart2);
   /* USER CODE BEGIN USART2_IRQn 1 */
 
+	if ((USART2->SR & UART_FLAG_RXNE) != RESET)
+	{
+		LED2_CTRL(GPIO_TOGGLE);
+		
+		gRxBuffer[gRxCount] = USART2->DR;
+		gRxCount +=1;
+		
+		if(gRxCount > 127)
+		{
+			gRxCount = 0;
+			memset(gRxBuffer, 0x00, sizeof(gRxBuffer));
+		}
+	}
+	
   /* USER CODE END USART2_IRQn 1 */
 }
 

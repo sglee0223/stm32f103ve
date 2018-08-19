@@ -43,6 +43,22 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN 0 */
+#include <string.h>
+
+void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
+{
+	// nothing here
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	// nothing here
+}
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+	// nothing here
+}
 
 /* USER CODE END 0 */
 
@@ -145,6 +161,9 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     HAL_NVIC_EnableIRQ(USART2_IRQn);
   /* USER CODE BEGIN USART2_MspInit 1 */
 
+	__HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
+	//__HAL_UART_ENABLE_IT(&huart2, UART_IT_TXE);			
+		
   /* USER CODE END USART2_MspInit 1 */
   }
 }
@@ -193,6 +212,27 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 } 
 
 /* USER CODE BEGIN 1 */
+
+#ifdef __GNUC__
+  /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
+     set to 'Yes') calls __io_putchar() */
+  #define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+  #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif /* __GNUC__ */
+/**
+  * @brief  Retargets the C library printf function to the USART.
+  * @param  None
+  * @retval None
+  */
+PUTCHAR_PROTOTYPE
+{
+  /* Place your implementation of fputc here */
+  /* e.g. write a character to the EVAL_COM1 and Loop until the end of transmission */
+  HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);
+
+  return ch;
+}
 
 /* USER CODE END 1 */
 

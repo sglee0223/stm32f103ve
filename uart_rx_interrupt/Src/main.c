@@ -50,7 +50,9 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-
+unsigned char gButtonPressed;
+unsigned int gRxCount;
+unsigned char gRxBuffer[128];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -74,6 +76,7 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
+	uint8_t txData[] = {'s','t','m','3','2','f','1'};
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -97,7 +100,12 @@ int main(void)
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
+	
+	printf("\r\nProgram Start\r\n");
+	LED1_CTRL(GPIO_TOGGLE);
 
+	gButtonPressed = 0;
+	
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -108,7 +116,42 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+		
+			if (gButtonPressed)
+			{
+				gButtonPressed = 0;
 
+				printf("\r\nHAL_UART_Transmit\r\n");	
+
+				if (HAL_UART_Transmit_IT (&huart2, (uint8_t*)txData, sizeof(txData)) != HAL_OK)
+				{
+					printf("transmit error\r\n");
+				}
+
+				while (HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY)
+				{
+					printf(".");
+				} 
+
+#if 0				
+				if(HAL_UART_Receive_IT(&huart2, (uint8_t *)gRxBuffer, 1) == HAL_OK)
+				{
+					printf("rx=%c\r\n", gRxBuffer[0]);
+				}		
+
+				while (HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY)
+				{
+					printf(".");
+				} 
+#endif				
+			}	
+			
+			if (gRxCount > 0)
+				printf("rxbuffer [%s][%d]\r\n", gRxBuffer, gRxCount);
+			
+			HAL_Delay(500);
+
+  /* USER CODE END 2 */
   }
   /* USER CODE END 3 */
 

@@ -62,7 +62,9 @@
 /* #define USE_FULL_ASSERT    1U */
 
 /* USER CODE BEGIN Private defines */
-
+extern unsigned char gButtonPressed;
+extern unsigned int gRxCount;
+extern unsigned char gRxBuffer[128];
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
