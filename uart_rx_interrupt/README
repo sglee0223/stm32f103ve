@@ -1,0 +1,11 @@
+use RCC > HSE > Crystal/Ceramic Resonator
+use PC6, PC7 LED port
+use USART1 > Asynchronous
+    - debugging
+use USART2 > Asynchronous
+    - uart rx interrupt
+use PB1 > GPIO_EXTI1
+    - button press for tx
+NVIC Configuration
+    - EXTI line 1 interrupt, 15 priority
+    - USART2 global interrupt, 1 priority
