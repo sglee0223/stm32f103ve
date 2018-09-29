@@ -1,0 +1,13 @@
+use RCC > HSE > Crystal/Ceramic Resonator
+
+use PA6 : PULSE
+use PC4 : EN
+use PB0 : DIR
+
+use PC6, PC7 LED port
+
+use TIM1 > Clock Source > Internal Clock
+- Prescaler 36000
+- 72MHz / 36000 - 1 = 2kHz = 0.5ms
+- Counter Period 10
+- 5ms timer interrupt
