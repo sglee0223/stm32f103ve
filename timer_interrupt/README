@@ -3,6 +3,6 @@ Prescaler : 36000-1
 Counter Period : 800
 
 1) 72MHz System Clock, Prescaler 1MHz Timer Clock
-    Prescaler = 72MHz / 36000 - 1 = 2KHz = 0.05ms
+    Prescaler = 72MHz / 36000 - 1 = 2KHz = 0.5ms
 2) 2KHz Timer Clock,
     Period = 800 => 400ms
